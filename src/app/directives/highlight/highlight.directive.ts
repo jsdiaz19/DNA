@@ -14,13 +14,9 @@ export class HighlightDirective {
   }
 
   ngOnChanges(){
-    if(this.appHighlight.find((x)=> {
-      
-      return x[0] === this.posX && x[1]=== this.posY
-    })){
+    if(this.appHighlight.find((x)=> { return x[0] === this.posX && x[1]=== this.posY})){
       this.el.nativeElement.style.backgroundColor = 'yellow';
     }
-   
   }
 
 }

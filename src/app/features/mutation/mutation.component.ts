@@ -29,6 +29,10 @@ export class MutationComponent {
   dnaSequence: FormControl<string| null> = new FormControl<string>({value:'',disabled:true} ,{ validators: [ Validators.pattern('^[ATCGatcg]+$') ]},);
   dna= signal<string[]>([]);
   posSequence= signal<[number,number][]>([]);
+  
+  /**
+   * Agrega una secuencia de ADN
+   */
   addSequence(){
     if( this.dna.length <= this.size() && this.dnaSequence.value != null){
       this.dna.update(prev=> [...prev, this.dnaSequence.value!]);
@@ -36,10 +40,24 @@ export class MutationComponent {
     }
   }
 
+  /**
+   * Valida si la pocision a evaluar es valida
+   * @param x pocision en X
+   * @param y pocision en Y
+   * @returns 
+   */
   validNewPosition(x:number,y:number){
     return x>=0 && x<this.size() && y>=0 && y<this.size();
   }
 
+  /**
+   * Busca una secuencia de 4 letras basada en una direccion y una pocision base
+   * @param x Pocision en X
+   * @param y Pocision en Y
+   * @param changeX Delta en X
+   * @param changeY Delta en Y
+   * @returns 
+   */
   searchPositions(x:number, y:number, changeX:number, changeY:number){
     const char = this.dna()[x][y];
     const positions:[number, number][] = [[x,y]];
@@ -55,6 +73,9 @@ export class MutationComponent {
     return true;
   }
 
+  /**
+   * Busca secuencia de ADN en una matriz
+   */
   searchSequences(){
     const directions= [ [0,1], [1,0], [1,1],[1,-1]];
     let count=0;
@@ -74,12 +95,19 @@ export class MutationComponent {
     }
   }
 
+  /**
+   * Asigna el tamano de la matriz
+   * @param $event 
+   */
   setSizeADN($event: Event){
     const elemt= $event.target as HTMLInputElement;
     this.size.set(Number(elemt.value));
     this.dnaSequence.enable();
   }
 
+  /**
+   * Resetea los valores para una proxima evaluacion
+   */
   reset(){
     this.size.set(0);
     this.dnaSequence.setValue('');
