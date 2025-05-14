@@ -1,0 +1,51 @@
+<h1>Validacion de mutante</h1>
+
+<mat-form-field>
+    <mat-label>Tamaño de matriz</mat-label>
+    <input matInput type="number" [value]="size()" (input)="size.set($any($event.target).value)">
+</mat-form-field>
+
+<button mat-button (click)="size.set(0)">Reset</button>
+
+@if ( size()> 0 ) {
+    
+    @if (dna().length < size()) {
+        <div>
+            <mat-form-field >
+                <mat-label>Secuencia DNA</mat-label>
+                <input matInput type="text" [formControl]="dnaSequence" [attr.readonly]="dna.length >= size() ? true : null">
+                <button mat-icon-button matSuffix [disabled]="!dnaSequence.valid || dnaSequence.value?.length != size()" (click)="addSequence()" >
+                    <mat-icon>add</mat-icon>
+                </button>
+            </mat-form-field>   
+
+        </div>
+    }
+    
+   <div class="contReview">
+
+        <div class="sequenceMatrix" [style.grid-template-columns]="'repeat(' + size() + ', 1fr)'">
+            @for (sequence of dna(); track $index) {
+                @for (adn of sequence; track $index) {
+                    <div class="grid-cell">{{adn | uppercase}} </div>
+                }
+            }
+        </div>
+
+        <button mat-raised-button (click)="searchSequences()">Analizar</button>
+
+        @if (show) {
+            <div class="sequenceMatrix" [style.grid-template-columns]="'repeat(' + size() + ', 1fr)'">
+            @for (sequence of dna(); track sequence; let posX = $index) {
+                @for (adn of sequence; track adn; let posY = $index) {
+                    <div class="grid-cell" [appHighlight]="posSequence()" [posX]="posX" [posY]="posY" >{{adn | uppercase}} </div>
+                }
+            }
+        </div>
+        }
+        
+
+   </div>     
+    
+    
+}

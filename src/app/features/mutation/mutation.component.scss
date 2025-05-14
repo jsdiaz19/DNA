@@ -1,0 +1,20 @@
+.dna-content{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.sequenceMatrix{
+    display: grid;
+    width: 30%;
+    .grid-cell{
+        border: 1px solid;
+        text-align: center;
+        padding: 2%;
+    }
+}
+
+.contReview{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
