@@ -25,14 +25,13 @@ import { HighlightDirective} from '../../directives/highlight/highlight.directiv
   styleUrl: './mutation.component.scss'
 })
 export class MutationComponent {
-  size= signal<number>(0);
-  dnaSequence: FormControl<string| null> = new FormControl<string>('', { validators: [ Validators.pattern('^[ATCGatcg]+$') ]});
+  size= signal<number >(0);
+  dnaSequence: FormControl<string| null> = new FormControl<string>({value:'',disabled:true} ,{ validators: [ Validators.pattern('^[ATCGatcg]+$') ]},);
   dna= signal<string[]>([]);
   posSequence= signal<[number,number][]>([]);
-  show=false;
   addSequence(){
     if( this.dna.length <= this.size() && this.dnaSequence.value != null){
-      this.dna().push(this.dnaSequence.value);
+      this.dna.update(prev=> [...prev, this.dnaSequence.value!]);
       this.dnaSequence.setValue('');
     }
   }
@@ -68,8 +67,25 @@ export class MutationComponent {
         }
       }
     }
-    this.show=true;
-    console.log(count, this.posSequence());
+    if( count> 0){
+      alert("La secuencia de ADN pertenece a un mutante");
+    }else{
+      alert("La secuencia de ADN pertenece a un humano");
+    }
+  }
+
+  setSizeADN($event: Event){
+    const elemt= $event.target as HTMLInputElement;
+    this.size.set(Number(elemt.value));
+    this.dnaSequence.enable();
+  }
+
+  reset(){
+    this.size.set(0);
+    this.dnaSequence.setValue('');
+    this.dnaSequence.disable();
+    this.posSequence.set([]);
+    this.dna.set([]);
   }
 
 }

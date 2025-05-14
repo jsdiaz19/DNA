@@ -13,8 +13,7 @@ export class HighlightDirective {
     
   }
 
-  ngOnInit(){
-    console.log(this.posX, this.posY, this.appHighlight);
+  ngOnChanges(){
     if(this.appHighlight.find((x)=> {
       
       return x[0] === this.posX && x[1]=== this.posY
